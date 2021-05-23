@@ -1,15 +1,27 @@
-var express = require('express');
-var app = express();
-var db = require('./db');
-var user = require('./controllers/usercontroller');
-var game = require('./controllers/gamecontroller')
+const express = require('express');
+const app = express();
+const user = require('./controllers/usercontroller');
+const game = require('./controllers/gamecontroller')
+const authorization = require('./middleware/validate-session');
+const { PORT } = require('./config');
+const { sequelize } = require('./db');
 
 
-db.sync();
-app.use(require('body-parser'));
+app.use('/', (req, res, next) => {
+    if (req.originalUrl === '/') {
+        res.send('Service is running!');
+        return;
+    }
+    next();
+});
+
+app.use(express.json());
+
 app.use('/api/auth', user);
-app.use(require('./middleware/validate-session'))
+app.use(authorization.checkAuthorization);
 app.use('/api/game', game);
-app.listen(function() {
+
+app.listen(PORT, () => {
     console.log("App is listening on 4000");
+    sequelize.sync({ force: true });
 })

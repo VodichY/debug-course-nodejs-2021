@@ -1,4 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
+
+module.exports = function (sequelize, DataTypes) {
     return sequelize.define('user', {
         full_name: {
             type: DataTypes.STRING,
@@ -10,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
 
-        passwordHash: {
+        passwordhash: {
             type: DataTypes.STRING,
             allowNull: false
         },
