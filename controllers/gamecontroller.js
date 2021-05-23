@@ -1,7 +1,7 @@
-var router = require('express').Router();
-var Game = require('../db').Game;
+const router = require('express').Router();
+const { Game } = require('../db');
 
-router.get('/all', (req, res) => {
+router.get('/', (req, res) => {
     Game.findAll({ where: { owner_id: req.user.id } })
         .then(
             function findSuccess(games) {
@@ -36,7 +36,7 @@ router.get('/:id', (req, res) => {
         )
 })
 
-router.post('/create', (req, res) => {
+router.post('/', (req, res) => {
     Game.create({
         title: req.body.title,
         owner_id: req.user.id,
@@ -59,7 +59,7 @@ router.post('/create', (req, res) => {
         )
 })
 
-router.put('/update/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     Game.update({
         title: req.body.title,
         studio: req.body.studio,
@@ -90,7 +90,7 @@ router.put('/update/:id', (req, res) => {
         )
 })
 
-router.delete('/remove/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Game.destroy({
         where: {
             id: req.params.id,

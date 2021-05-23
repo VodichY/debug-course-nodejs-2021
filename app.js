@@ -1,10 +1,11 @@
-var express = require('express');
-var app = express();
-var db = require('./db').sequelize;
-var user = require('./controllers/usercontroller');
-var game = require('./controllers/gamecontroller')
+const express = require('express');
+const app = express();
+const user = require('./controllers/usercontroller');
+const game = require('./controllers/gamecontroller')
 const authorization = require('./middleware/validate-session');
 const { PORT } = require('./config');
+const { sequelize } = require('./db');
+
 
 app.use('/', (req, res, next) => {
     if (req.originalUrl === '/') {
@@ -22,5 +23,5 @@ app.use('/api/game', game);
 
 app.listen(PORT, () => {
     console.log("App is listening on 4000");
-    db.sync({ force: true });
+    sequelize.sync({ force: true });
 })
