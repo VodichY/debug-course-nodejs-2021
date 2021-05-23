@@ -1,15 +1,14 @@
 var router = require('express').Router();
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-
-var User = require('../models/user');
+var User = require('../db').User;
 
 router.post('/signup', (req, res) => {
     User.create({
-        full_name: req.body.user.full_name,
-        username: req.body.user.username,
-        passwordhash: bcrypt.hashSync(req.body.user.password, 10),
-        email: req.body.user.email,
+        full_name: req.body.full_name,
+        username: req.body.username,
+        passwordhash: bcrypt.hashSync(req.body.password, 10),
+        email: req.body.email,
     })
         .then(
             function signupSuccess(user) {
@@ -27,9 +26,9 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/signin', (req, res) => {
-    User.findOne({ where: { username: req.body.user.username } }).then(user => {
+    User.findOne({ where: { username: req.body.username } }).then(user => {
         if (user) {
-            bcrypt.compare(req.body.user.password, user.passwordHash, function (err, matches) {
+            bcrypt.compare(req.body.password, user.passwordhash, function (err, matches) {
                 if (matches) {
                     var token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
                     res.json({
@@ -38,11 +37,11 @@ router.post('/signin', (req, res) => {
                         sessionToken: token
                     });
                 } else {
-                    res.status(502).send({ error: "Passwords do not match." })
+                    res.status(500).send({ error: "Passwords do not match." })
                 }
             });
         } else {
-            res.status(403).send({ error: "User not found." })
+            res.status(404).send({ error: "User not found." })
         }
 
     })
