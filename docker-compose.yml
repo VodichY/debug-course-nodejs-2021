@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+    app:
+        build: .
+        ports:
+            - "4000:4000"
+        depends_on:
+            - db
+        networks: 
+            - net    
+    db:
+        build: ./database
+        ports: 
+            - "5432:5432"
+        networks: 
+            - net
+        environment:
+            - POSTGRES_PASSWORD=123456
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=test
+            - POSTGRES_HOST=postgres
+networks: 
+    net: 
+      driver: bridge         

@@ -2,5 +2,10 @@ require('dotenv').config();
 
 module.exports = {
     PORT: process.env.PORT,
-    PG_CONNECTION_STRING: process.env.PG_CONNECTION_STRING
+    PG_CONNECTION_STRING: process.env.PG_CONNECTION_STRING,
+    POSTGRES_PORT: process.env.POSTGRES_PORT,
+    POSTGRES_USER: process.env.POSTGRES_USER,
+    POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+    POSTGRES_DB: process.env.POSTGRES_DB,
+    POSTGRES_HOST: process.env.POSTGRES_HOST
 };
