@@ -6,19 +6,29 @@ services:
             - "4000:4000"
         depends_on:
             - db
+        restart: always
+        volumes: 
+            - /app/node_modules
+            - .:/app    
         networks: 
             - net    
-    db:
+    db:     
+        networks: 
+            - net
+        restart: always
         build: ./database
         ports: 
             - "5432:5432"
-        networks: 
-            - net
+        volumes: 
+            - data:/var/lib/postgresql/data
         environment:
-            - POSTGRES_PASSWORD=123456
-            - POSTGRES_USER=postgres
-            - POSTGRES_DB=test
-            - POSTGRES_HOST=postgres
+            POSTGRES_PASSWORD: 123456
+            POSTGRES_USER: postgres
+            POSTGRES_DB: test
+            #PGDATA: /tmp          
 networks: 
     net: 
-      driver: bridge         
+        driver: bridge 
+volumes:
+    data:
+        external: true                    
